@@ -22,9 +22,12 @@ type Enemy () as this =
 
   [<DefaultValue>]
   val mutable hp : int
+  [<DefaultValue>]
+  val mutable point : int
 
   do
     this.hp <- 1
+    this.point <- 100
 
   member this.Start () : unit =
     let vec = this.transform.up * float32 -1 in
@@ -45,6 +48,7 @@ type Enemy () as this =
         this.hp <- this.hp - bullet.power
         if this.hp <= 0
           then
+            (Object.FindObjectOfType<Score> ()).AddPoint(this.point)
             this.Explosion () 
             Object.Destroy this.gameObject
           else
